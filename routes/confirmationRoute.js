@@ -11,7 +11,7 @@ const userData = {
 
 async function confirmationRoute(fastify,options,done){
     fastify.get('/confirm/:id',async(req,res) => {
-        const HashedId = req.params.id;
+        const HashedId = decodeURIComponent(req.params.id);
         let foundUser;
         for (let i = 0; i < userData.users.length; i++) {
             if (await bcrypt.compare(userData.users[i].email,HashedId)){
