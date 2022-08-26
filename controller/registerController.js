@@ -7,8 +7,6 @@ require('dotenv').config();
 
 const nodemailer = require('nodemailer');
 
-
-
 // user data: 
 
 const userData = {
@@ -41,39 +39,31 @@ const registerNewUser = async (request,response) => {
         response.status(400).send({error:'user already exists'});
     }
     else{
-       
-                
-        /*
-            sending confirmation email to the user using nodemailer package
-            1) npm install nodemailer : //*DONE
-            2) npm install : //*DONE
-            3) setting up nodemailer : 
-            4) prepare mail body which contains the link to the confirmation page with the hashed email
-            5) send the mail
-            6) if the hash matches then the user is registered
-        */ 
-       
+        // creating transport to send email
             const transport = nodemailer.createTransport({
                 service:'gmail',
                     host: 'smtp.example.tld',
                     port: 465,
                     secure: true,
                     auth:{
-                        user:'mu247609@gmail.com',
-                        pass:'nkgjkhefhacgwgjj'
+                        user: process.env.EMAIL,
+                        pass: process.env.PASSWORD
                     }
             })
-         
+        
+        // hashing and encoding the email...
         const hashedEmail = await bcrypt.hash(email,10);
         const encodedMail = encodeURIComponent(hashedEmail);
-        console.log(await bcrypt.compare(email,hashedEmail))
+
+        // defining mail options
         const mailOptions = {
-            from: 'mu247609@gmail.com',
+            from: process.env.EMAIL,
             to: email,
             subject: 'Confirm your email',
             text : `Thanks for registering! Please click on the link to confirm your email: http://localhost:3500/confirm/${encodedMail}`
         }
         
+        // sending mail 
         transport.sendMail(mailOptions, async function(error,info) {
             if (error) {
                 console.log(error);
@@ -84,38 +74,6 @@ const registerNewUser = async (request,response) => {
                 
             }
         })
-        
-        // response.status(200).send({"message":'user registered successfully'})
-                // adding new user into users array..
-                
-        // confirmation token
-        // const confirmationToken = jwt.sign(
-        //     {email:email},
-        //     process.env.CONFIRMATION_TOKEN_SECRET,
-        //     {expiresIn:'10min'}
-        // )
-        // console.log(confirmationToken)
-        // const mailOptions = {
-        //     from: 'mu247609@gmail.com',
-        //     to: email,
-        //     subject: 'Confirm your email',
-        //     text : `Thanks for registering! Please click on the link to confirm your email: http://localhost:3500/confirm/${confirmationToken}`
-        // }
-
-        // transport.sendMail(mailOptions, async function(error,info) {
-        //     if (error) {
-        //         console.log(error);
-        //     } else {
-        //         console.log('Email sent: ' + info.response);
-        //         await userData.setUsersData([...userData.users,newUser]);
-        //         await fsPromises.writeFile(path.join(__dirname, '..','model','users.json'),JSON.stringify(userData.users))
-                
-        //     }
-        // })
-
-
-        
-        
     }
 
 

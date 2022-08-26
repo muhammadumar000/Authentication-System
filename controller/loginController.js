@@ -1,7 +1,4 @@
 require('dotenv').config()
-
-
-
 const fsPromises = require('fs').promises;
 const path = require('path');
 const bcrypt = require('bcrypt');

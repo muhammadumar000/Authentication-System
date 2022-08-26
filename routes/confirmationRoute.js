@@ -20,7 +20,7 @@ async function confirmationRoute(fastify,options,done){
         }
         
         if(foundUser){
-            // change isverified to true
+            // change isVerified to true
             foundUser.isVerified = true;
             // write the new user data to the file
             userData.setUsersData([...userData.users.filter(user => user.email !== foundUser.email),foundUser]);
