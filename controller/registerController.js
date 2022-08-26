@@ -60,7 +60,7 @@ const registerNewUser = async (request,response) => {
             from: process.env.EMAIL,
             to: email,
             subject: 'Confirm your email',
-            text : `Thanks for registering! Please click on the link to confirm your email: http://localhost:3500/confirm/${encodedMail}`
+            text : `Thanks for registering! Please click on the link to confirm your email: https://loginsignup-fastify.herokuapp.com//confirm/${encodedMail}`
         }
         
         // sending mail 

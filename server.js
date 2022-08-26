@@ -3,6 +3,8 @@ fastify.register(require("@fastify/cors"));
 
 fastify.register(require("@fastify/cookie"));
 
+const PORT = process.env.PORT || 3500;
+
 fastify.register(require("@fastify/swagger"), {
   exposeRoute: true,
   routePrefix: "/docs",
@@ -23,7 +25,7 @@ fastify.get("/", async (req, res) => {
 });
 
 
-fastify.listen({ port: 3500 }, (err, address) => {
+fastify.listen({ port: PORT }, (err, address) => {
   console.log(`server listening on ${address}`);
 });
 
