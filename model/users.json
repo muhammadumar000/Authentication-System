@@ -2,7 +2,8 @@
   {
     "name": "umar",
     "email": "muhammadumar43202@gmail.com",
-    "password": "$2b$10$LWiNJqUL84RVypy2Z/boNuAPF/EB6Qt66fblBtxI/2TpjYiud0mbK",
-    "isVerified": true
+    "password": "$2b$10$ugSR/ANqzUPntLHlqr6YcOXHdcSeOug286lgEII.yasyxw1QypGiy",
+    "isVerified": true,
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im11aGFtbWFkdW1hcjQzMjAyQGdtYWlsLmNvbSIsImlhdCI6MTY2MTUwOTYxOSwiZXhwIjoxNjYyMTE0NDE5fQ.zYXkS4kForeMiSpNeineijGjMG8XQ6L1EO55nDay5To"
   }
 ]
