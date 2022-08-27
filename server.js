@@ -23,7 +23,7 @@ fastify.get("/", async (req, res) => {
 });
 
 
-fastify.listen({ port: process.env.PORT || 3500 }, (err, address) => {
+fastify.listen(process.env.PORT || 3500, async (err, address) => {
   console.log(`server listening on ${address}`);
 });
 
