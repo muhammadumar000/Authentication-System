@@ -5,5 +5,11 @@
     "password": "$2b$10$ugSR/ANqzUPntLHlqr6YcOXHdcSeOug286lgEII.yasyxw1QypGiy",
     "isVerified": true,
     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im11aGFtbWFkdW1hcjQzMjAyQGdtYWlsLmNvbSIsImlhdCI6MTY2MTUwOTYxOSwiZXhwIjoxNjYyMTE0NDE5fQ.zYXkS4kForeMiSpNeineijGjMG8XQ6L1EO55nDay5To"
+  },
+  {
+    "name": "test",
+    "email": "wyroposo@ema-sofia.eu",
+    "password": "$2b$10$WatFnMGwP/kr5bzFrZViIOo7DC4FnHsvl216eq/2HCzr3lj4xr1uq",
+    "isVerified": true
   }
 ]
