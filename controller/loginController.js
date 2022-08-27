@@ -36,13 +36,12 @@ const loginUser = async (request,response) => {
             const accessToken = jwt.sign(
                 {email:foundUser.email},
                 process.env.ACCESS_TOKEN_SECRET,
-                {expiresIn:'1h'}
+                {expiresIn:'10s'}
             )
-    
+                // refresh token for logout purpose
             const refreshToken = jwt.sign(
                 {email:foundUser.email},
-                process.env.REFRESH_TOKEN_SECRET,
-                {expiresIn:'7d'}
+                process.env.REFRESH_TOKEN_SECRET
             )
     
             const otherUsers = userData.users.filter(user => user.email !== foundUser.email)
@@ -53,8 +52,7 @@ const loginUser = async (request,response) => {
             await fsPromises.writeFile(path.join(__dirname,'..','model','users.json'),
             JSON.stringify(userData.users)
             );
-            response.setCookie('jwt',refreshToken,{httpOnly:true,maxAge :6840000})
-            response.status(200).send({accessToken})
+            response.status(200).send({accessToken,refreshToken})
         } else{
             response.status(401).send({"message":"user not verified"})
         }

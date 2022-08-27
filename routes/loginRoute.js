@@ -6,7 +6,8 @@ const loginUser = {
             200 : {
                 type : 'object',
                 properties:{
-                    accessToken: {type : 'string'}
+                    accessToken: {type : 'string'},
+                    refreshToken: {type : 'string'}
                 }
             }
         },

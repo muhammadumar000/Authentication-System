@@ -15,6 +15,8 @@ fastify.register(require("./routes/authRoute"));
 fastify.register(require("./routes/registerRoute"));
 fastify.register(require("./routes/loginRoute"));
 fastify.register(require('./routes/confirmationRoute'));
+fastify.register(require('./routes/forgetPass'));
+fastify.register(require('./routes/logoutRoute'));
 
 
 fastify.get("/", async (req, res) => {
@@ -23,7 +25,7 @@ fastify.get("/", async (req, res) => {
 });
 
 
-fastify.listen(process.env.PORT || 3500, async (err, address) => {
+fastify.listen({ port: process.env.PORT || 3500 }, (err, address) => {
   console.log(`server listening on ${address}`);
 });
 
