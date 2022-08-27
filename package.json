@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"postinstall": "npm run build",
+
         "start": "node server.js",
 		"dev": "nodemon server.js"
 	},
@@ -23,9 +23,5 @@
 		"jsonwebtoken": "^8.5.1",
 		"nodemailer": "^6.7.8",
 		"nodemon": "^2.0.19"
-	},
-	"engines": {
-		"node": "16.6.0",
-		"npm":"8.11.0"
 	}
 }
