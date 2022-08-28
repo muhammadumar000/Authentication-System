@@ -61,7 +61,7 @@ const registerNewUser = async (request,response) => {
             to: email,
             subject: 'Confirm your email',
             html : `
-            <h3 style="text-align:center">Hi ${name},Thanks for Signing up</h3>
+            <p style="text-align:center">Hi ${name},Thanks for Signing up</p>
             <p> Please click on this link to Verify your account </p>
             <p> https://authsystem-fastify.herokuapp.com/confirm/${encodedMail} </p>
             ` 
