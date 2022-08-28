@@ -63,7 +63,7 @@ const registerNewUser = async (request,response) => {
             html : `
             <h2 style="text-align:center">Thanks for Signing up</h2>
             <p> Please click on this link to Verify your account </p>
-            <p> http://127.0.0.1:3500/confirm/${encodedMail} </p>
+            <p> https://authsystem-fastify.herokuapp.com/confirm/${encodedMail} </p>
             ` 
         }
         
