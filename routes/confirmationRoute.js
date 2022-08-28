@@ -2,31 +2,26 @@ const bcrypt = require('bcrypt');
 const fsPromises = require('fs').promises;
 const path = require('path');
 
-// user data: 
+// mongo db connection
+const {MongoClient} = require("mongodb");
+const uri = process.env.URI_MONGO_DB;
+const client = new MongoClient(uri);
 
-const userData = {
-    users: require('../model/users.json'),
-    setUsersData : function(data) {this.users = data}
-}
+
 
 async function confirmationRoute(fastify,options,done){
     fastify.get('/confirm/:id',async(req,res) => {
         const HashedId = decodeURIComponent(req.params.id);
+        const allUsers = await client.db("AuthenticationData").collection("usersData").find().toArray();
         let foundUser;
-        for (let i = 0; i < userData.users.length; i++) {
-            if (await bcrypt.compare(userData.users[i].email,HashedId)){
-                foundUser = userData.users[i];
+        for (let i = 0; i < allUsers.length; i++) {
+            if (await bcrypt.compare(allUsers[i].email,HashedId)){
+                foundUser = allUsers[i];
             }
         }
         
         if(foundUser){
-            // change isVerified to true
-            foundUser.isVerified = true;
-            // write the new user data to the file
-            userData.setUsersData([...userData.users.filter(user => user.email !== foundUser.email),foundUser]);
-            await fsPromises.writeFile(path.join(__dirname,'..','model','users.json'),
-            JSON.stringify(userData.users)
-            );
+            await client.db("AuthenticationData").collection("usersData").updateOne({email:foundUser.email},{$set:{isVerified:true}})
             res.send({"message":"Account Verified"})
         }
         else{

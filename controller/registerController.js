@@ -4,15 +4,14 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+// mongo db connection
+const {MongoClient} = require("mongodb");
+const uri = process.env.URI_MONGO_DB;
+const client = new MongoClient(uri);
+
 
 const nodemailer = require('nodemailer');
 
-// user data: 
-
-const userData = {
-    users: require('../model/users.json'),
-    setUsersData : function(data) {this.users = data}
-}
 
 const registerNewUser = async (request,response) => {
     const {name,email,password} = request.body;
@@ -34,7 +33,8 @@ const registerNewUser = async (request,response) => {
 
     // checking for duplicate user...
 
-    const duplicateUser = userData.users.find(user => user.email === email);
+    const duplicateUser = await client.db("AuthenticationData").collection("usersData").findOne({email:email});
+
     if(duplicateUser){
         response.status(400).send({error:'user already exists'});
     }
@@ -60,7 +60,11 @@ const registerNewUser = async (request,response) => {
             from: process.env.EMAIL,
             to: email,
             subject: 'Confirm your email',
-            html : `<h2>Thanks for registering! Please click on the link to confirm your email: http://localhost:3500/confirm/${encodedMail}</h2>` 
+            html : `
+            <h2 style="text-align:center">Thanks for Signing up</h2>
+            <p> Please click on this link to Verify your account </p>
+            <p> http://127.0.0.1:3500/confirm/${encodedMail} </p>
+            ` 
         }
         
         // sending mail 
@@ -69,8 +73,12 @@ const registerNewUser = async (request,response) => {
                 console.log(error);
             } else {
                 console.log('Email sent: ' + info.response);
-                await userData.setUsersData([...userData.users,newUser]);
-                await fsPromises.writeFile(path.join(__dirname, '..','model','users.json'),JSON.stringify(userData.users))
+                try{
+                    await client.db("AuthenticationData").collection("usersData").insertOne(newUser);
+                    await response.status(201).send({message:'user created successfully'});
+                } catch{
+                    response.status(500).send({error:'server error'});
+                }
                 
             }
         })

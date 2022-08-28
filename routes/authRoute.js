@@ -26,7 +26,7 @@ module.exports = function (fastify, options, next) {
     })
 
     fastify.get('/myData', function(req, reply) {
-        reply.send( require('../model/users.json').find(user => user.email === req.user));
+        reply.send({message:"Hi, Your are Authorized"});
     })
     next()
 }

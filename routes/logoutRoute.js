@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 const fsPromises  = require('fs').promises;
 const path = require('path');
 
-const userData = {
-    users: require('../model/users.json'),
-    setUsersData : function(data) {this.users = data}
-}
+// mongo db connection
+const {MongoClient} = require("mongodb");
+const uri = process.env.URI_MONGO_DB;
+const client = new MongoClient(uri);
 
 
 async function logoutRoute(fastify,options,done){
@@ -16,7 +16,7 @@ async function logoutRoute(fastify,options,done){
        const {refreshToken} = req.body;
          if(refreshToken){
                 const decoded = jwt.verify(refreshToken,process.env.REFRESH_TOKEN_SECRET);
-                let foundUser = userData.users.find(user => user.email === decoded.email);
+                let foundUser = await client.db("AuthenticationData").collection("usersData").findOne({email:decoded.email});
                 if(foundUser){
                     foundUser = {
                         name : foundUser.name,  
@@ -24,10 +24,9 @@ async function logoutRoute(fastify,options,done){
                         password : foundUser.password,
                         isVerified : foundUser.isVerified,
                     }
-                    userData.setUsersData([...userData.users.filter(user => user.email !== foundUser.email),foundUser]);
-                    await fsPromises.writeFile(path.join(__dirname,'..','model','users.json'),
-                    JSON.stringify(userData.users)
-                    );
+
+                    await client.db("AuthenticationData").collection("usersData").updateOne({email:foundUser.email},{$unset:{refreshToken: ""}})
+    
                     res.status(200).send({"message":"User logged out"})
                 }
                 else{

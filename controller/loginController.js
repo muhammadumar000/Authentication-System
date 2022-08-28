@@ -5,12 +5,10 @@ const bcrypt = require('bcrypt');
 
 const jwt = require('jsonwebtoken')
 
-// user data:
-
-const userData = {
-    users: require('../model/users.json'),
-    setUsersData : function(data) {this.users = data}
-}
+// mongo db connection
+const {MongoClient} = require("mongodb");
+const uri = process.env.URI_MONGO_DB;
+const client = new MongoClient(uri);
 
 const loginUser = async (request,response) => {
 
@@ -20,10 +18,13 @@ const loginUser = async (request,response) => {
         response.status(400).send({"message":"email and password are required!"})
     }
 
-    const foundUser = userData.users.find(user => user.email === email);
+    const foundUser = await client.db("AuthenticationData").collection("usersData").findOne({email:email});
+
+    // const foundUser = userData.users.find(user => user.email === email);// 
+
 
     if(!foundUser){
-        response.status(400).send({"message":"Wrong Email Entered"})
+        response.status(401).send({"message":"Wrong  or Password Entered"})
     }
 
     const isPasswordMatched = await bcrypt.compare(password,foundUser.password);
@@ -43,22 +44,15 @@ const loginUser = async (request,response) => {
                 {email:foundUser.email},
                 process.env.REFRESH_TOKEN_SECRET
             )
-    
-            const otherUsers = userData.users.filter(user => user.email !== foundUser.email)
-            const currentUser = {...foundUser,refreshToken}
-    
-            userData.setUsersData([...otherUsers,currentUser])
-    
-            await fsPromises.writeFile(path.join(__dirname,'..','model','users.json'),
-            JSON.stringify(userData.users)
-            );
+
+            await client .db("AuthenticationData").collection("usersData").updateOne({email:foundUser.email},{$set:{refreshToken:refreshToken}})
             response.status(200).send({accessToken,refreshToken})
         } else{
             response.status(401).send({"message":"user not verified"})
         }
     }
     else{
-        response.status(400).send({"message":"Wrong Password Entered"})
+        response.status(400).send({"message":"Wrong Email or Password Password Entered"})
     }
 
 }
