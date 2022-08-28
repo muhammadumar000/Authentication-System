@@ -47,7 +47,7 @@ async function run() {
 run().catch(console.dir);
 
 
-fastify.listen({ port: process.env.PORT || 3500 }, (err, address) => {
+fastify.listen({ port: process.env.PORT || 3500,host:'0.0.0.0'}, (err, address) => {
   console.log(`server listening on ${address}`);
 });
 

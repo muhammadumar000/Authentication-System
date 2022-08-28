@@ -9,7 +9,7 @@
 	},
 	"keywords": [],
 	"author": "",
-	"license": "ISC",
+	"license": "MIT",
 	"dependencies": {
 		"@fastify/cookie": "^8.0.0",
 		"@fastify/cors": "^8.1.0",
