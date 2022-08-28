@@ -37,7 +37,7 @@ const loginUser = async (request,response) => {
             const accessToken = jwt.sign(
                 {email:foundUser.email},
                 process.env.ACCESS_TOKEN_SECRET,
-                {expiresIn:'10s'}
+                {expiresIn:'7d'}
             )
                 // refresh token for logout purpose
             const refreshToken = jwt.sign(
