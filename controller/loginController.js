@@ -24,7 +24,7 @@ const loginUser = async (request,response) => {
 
 
     if(!foundUser){
-        response.status(401).send({"message":"Wrong  or Password Entered"})
+        response.status(400).send({"message":"Wrong  or Password Entered"})
     }
 
     const isPasswordMatched = await bcrypt.compare(password,foundUser.password);
