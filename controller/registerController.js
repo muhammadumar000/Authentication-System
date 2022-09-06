@@ -38,7 +38,7 @@ const registerNewUser = async (request,response) => {
     const duplicateUser = await client.db("AuthenticationData").collection("usersData").findOne({email:email});
 
     if(duplicateUser){
-        response.status(400).send({error:'user already exists'});
+        response.status(401).send({error:'user already exists'});
     }
     else{
         // creating transport to send email
