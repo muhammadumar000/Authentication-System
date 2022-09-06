@@ -12,6 +12,8 @@ const client = new MongoClient(uri);
 
 const nodemailer = require('nodemailer');
 
+let flag=false;
+
 
 const registerNewUser = async (request,response) => {
     const {name,email,password} = request.body;
@@ -66,23 +68,26 @@ const registerNewUser = async (request,response) => {
             <p> https://authsystem-fastify.herokuapp.com/confirm/${encodedMail} </p>
             ` 
         }
+
+
+        response.status(200).send({message:'user Registered successfully'});
         
         // sending mail 
         transport.sendMail(mailOptions, async function(error,info) {
             if (error) {
                 console.log(error);
+
             } else {
                 console.log('Email sent: ' + info.response);
-                try{
-                    await client.db("AuthenticationData").collection("usersData").insertOne(newUser);
-                    await response.status(201).send({message:'user created successfully'});
-                } catch{
-                    response.status(500).send({error:'server error'});
-                }
                 
+                    await client.db("AuthenticationData").collection("usersData").insertOne(newUser);
+                   
             }
         })
+
     }
+
+    
 
 
 }
