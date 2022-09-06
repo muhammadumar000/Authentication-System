@@ -2,6 +2,12 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
+let loginUserEmail;
+
+const {MongoClient} = require("mongodb");
+const uri = process.env.URI_MONGO_DB;
+const client = new MongoClient(uri);
+
 
 module.exports = function (fastify, options, next) {
     fastify.addHook('onRequest', async (request, reply) => {
@@ -19,14 +25,14 @@ module.exports = function (fastify, options, next) {
                     reply.status(401).send({message:'Invalid Token'});
                 }
                 else{
-                    request.user = decoded.email;
+                    loginUserEmail = decoded.email;
                 }
             }
         )
     })
 
-    fastify.get('/myData', function(req, reply) {
-        reply.send({message:"Hi, Your are Authorized"});
-    })
+    fastify.get('/myData', async function(req, reply) {
+        const LoginnedUser= await client.db("AuthenticationData").collection("usersData").findOne({email:loginUserEmail})
+        reply.send({name:LoginnedUser.name,email:LoginnedUser.email})});
     next()
 }
