@@ -33,6 +33,6 @@ module.exports = function (fastify, options, next) {
 
     fastify.get('/myData', async function(req, reply) {
         const LoginnedUser= await client.db("AuthenticationData").collection("usersData").findOne({email:loginUserEmail})
-        reply.send({name:LoginnedUser.name,email:LoginnedUser.email})});
+        reply.status(200).send({name:LoginnedUser.name,email:LoginnedUser.email})});
     next()
 }
